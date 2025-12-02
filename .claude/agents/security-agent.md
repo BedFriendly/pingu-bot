@@ -75,7 +75,7 @@ bandit -r bot/
 ```javascript
 // ❌ BAD - 토큰이 코드에 하드코딩
 const client = new Client({ intents: [...] });
-client.login('MTIzNDU2Nzg5MDEyMzQ1Njc4OQ.GxxxxX.xxxxxxxxxxxxxxxxxxxxxxxxxxx');
+client.login('Hard coded token');
 
 // ✅ GOOD - 환경 변수 사용
 require('dotenv').config();
