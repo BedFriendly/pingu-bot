@@ -2,7 +2,11 @@ export class Validator {
   /**
    * Validate bet amount
    */
-  static isValidBet(amount: number, balance: number, minBet: number): {
+  static isValidBet(
+    amount: number,
+    balance: number,
+    minBet: number
+  ): {
     valid: boolean;
     error?: string;
   } {
@@ -76,7 +80,10 @@ export class Validator {
   /**
    * Validate cooldown
    */
-  static checkCooldown(lastUsed: Date | null, cooldownMs: number): {
+  static checkCooldown(
+    lastUsed: Date | null,
+    cooldownMs: number
+  ): {
     ready: boolean;
     remainingMs?: number;
   } {

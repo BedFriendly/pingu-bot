@@ -38,8 +38,7 @@ const command: Command = {
     for (const [category, commands] of Object.entries(categories)) {
       if (commands.length === 0) continue;
 
-      const categoryName =
-        category.charAt(0).toUpperCase() + category.slice(1);
+      const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
       const commandList = commands
         .map((cmd) => `\`/${cmd.data.name}\` - ${cmd.data.description}`)
         .join('\n');

@@ -38,8 +38,7 @@ export const config: Config = {
   },
   database: {
     path:
-      process.env.DATABASE_PATH ||
-      path.join(process.cwd(), 'data', 'pingu.db'),
+      process.env.DATABASE_PATH || path.join(process.cwd(), 'data', 'pingu.db'),
   },
   apis: {
     unsplashAccessKey: process.env.UNSPLASH_ACCESS_KEY || '',
