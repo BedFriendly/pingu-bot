@@ -23,7 +23,7 @@ tools: Read, Grep, Glob, Bash
 호출될 때 먼저 다음을 확인하세요:
 
 1. Development Agent가 작성한 최신 코드
-2. `.eslintrc.js` / `pyproject.toml` - 코딩 스타일 규칙
+2. `.eslintrc.js` / `.prettierrc` - 코딩 스타일 규칙
 3. `CONTRIBUTING.md` - 프로젝트 코딩 컨벤션
 4. `tests/` - 테스트 코드 존재 여부
 5. 이전 코드 리뷰 피드백
@@ -48,8 +48,8 @@ async function getUserById(userId) {
 
 **체크 포인트**:
 
-- [ ] 일관된 들여쓰기 (2 또는 4 spaces)
-- [ ] 명명 규칙 준수 (camelCase, PascalCase)
+- [ ] 일관된 들여쓰기 (2 spaces)
+- [ ] 명명 규칙 준수 (camelCase)
 - [ ] 파일 및 폴더 구조의 적절성
 - [ ] import 문 정리 및 순서
 - [ ] 세미콜론 사용 일관성
@@ -218,15 +218,13 @@ async function updateUserLevel(userId, userRepository) {
 
 ```bash
 # Linting
-npm run lint
-# or
-eslint src/
+yarn lint
 
 # Type checking (TypeScript)
 tsc --noEmit
 
 # Test execution
-npm test
+yarn test
 ```
 
 ### 2. Manual Review
