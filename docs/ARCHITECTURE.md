@@ -7,7 +7,7 @@
 - **Runtime**: Node.js 18+
 - **Language**: TypeScript 5.x
 - **Bot Framework**: Discord.js v14
-- **Package Manager**: npm
+- **Package Manager**: yarn
 
 ### Database
 
@@ -429,7 +429,7 @@ try {
   logger.error(`Command ${command.data.name} failed`, error);
   await interaction.reply({
     content: '명령어 실행 중 오류가 발생했습니다.',
-    ephemeral: true,
+    flags: 'Ephemeral',
   });
 }
 
