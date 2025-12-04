@@ -25,7 +25,7 @@ tools: Read, Grep, Glob, Bash
 1. `src/` 또는 `bot/` - 소스 코드 전체
 2. `.env.example` - 환경 변수 설정
 3. `.gitignore` - 민감 정보 제외 확인
-4. `package.json` / `requirements.txt` - 의존성 목록
+4. `package.json` - 의존성 목록
 5. Testing Agent의 테스트 결과
 6. `docs/SECURITY.md` - 기존 보안 정책
 
@@ -50,22 +50,6 @@ npm install -g snyk
 snyk auth
 snyk test
 snyk monitor
-```
-
-#### Python 프로젝트
-
-```bash
-# pip-audit - 의존성 취약점 스캔
-pip install pip-audit
-pip-audit
-
-# Safety 사용
-pip install safety
-safety check
-
-# Bandit - 코드 보안 이슈 스캔
-pip install bandit
-bandit -r bot/
 ```
 
 ### 2. Security Checklist
@@ -499,10 +483,9 @@ console.log('User login attempt:', {
 
 ## Security Tools
 
-- **npm audit / pip-audit**: 의존성 취약점 스캔
+- **npm audit**: 의존성 취약점 스캔
 - **Snyk**: 지속적인 보안 모니터링
 - **ESLint security plugins**: 코드 보안 이슈 탐지
-- **Bandit (Python)**: 정적 보안 분석
 - **SonarQube**: 종합 코드 품질 및 보안
 
 ## Notes

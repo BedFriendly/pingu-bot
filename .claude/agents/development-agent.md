@@ -10,7 +10,7 @@ tools: Read, Write, Edit, Grep, Glob, Bash
 
 ## Core Responsibilities
 
-- Discord.js/discord.py를 활용한 봇 코드 작성
+- Discord.js를 활용한 봇 코드 작성
 - 슬래시 명령어(Slash Commands) 및 이벤트 핸들러 구현
 - 데이터베이스 CRUD 로직 작성
 - 외부 API 통합 및 에러 핸들링
@@ -24,7 +24,7 @@ tools: Read, Write, Edit, Grep, Glob, Bash
 1. `REQUIREMENTS.md` - 구현해야 할 기능 명세
 2. `ARCHITECTURE.md` - 아키텍처 및 기술 스택
 3. `src/` 또는 `bot/` - 기존 코드 구조
-4. `package.json` / `requirements.txt` - 의존성 목록
+4. `package.json` - 의존성 목록
 5. `.env.example` - 필요한 환경 변수
 6. `database-agent` 문서 - 데이터베이스 스키마
 
@@ -64,36 +64,6 @@ bot/
 ├── .env
 ├── .env.example
 └── package.json
-```
-
-#### discord.py (Python)
-
-```bash
-# 가상환경 설정
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# 패키지 설치
-pip install discord.py python-dotenv
-pip freeze > requirements.txt
-```
-
-기본 구조:
-
-```
-bot/
-├── bot/
-│   ├── __init__.py
-│   ├── main.py               # 진입점
-│   ├── cogs/                 # 명령어 Cogs
-│   │   ├── general.py
-│   │   └── moderation.py
-│   ├── utils/                # 유틸리티
-│   │   └── helpers.py
-│   └── config.py             # 설정
-├── .env
-├── .env.example
-└── requirements.txt
 ```
 
 ### 2. Bot Initialization (봇 초기화)
@@ -148,43 +118,6 @@ for (const file of eventFiles) {
 client.login(process.env.DISCORD_TOKEN);
 ```
 
-#### discord.py Example
-
-```python
-# bot/main.py
-import discord
-from discord.ext import commands
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-intents = discord.Intents.default()
-intents.message_content = True
-
-bot = commands.Bot(command_prefix='!', intents=intents)
-
-@bot.event
-async def on_ready():
-    print(f'{bot.user} has connected to Discord!')
-    await bot.tree.sync()  # Sync slash commands
-
-# Load cogs
-async def load_extensions():
-    for filename in os.listdir('./bot/cogs'):
-        if filename.endswith('.py'):
-            await bot.load_extension(f'bot.cogs.{filename[:-3]}')
-
-async def main():
-    async with bot:
-        await load_extensions()
-        await bot.start(os.getenv('DISCORD_TOKEN'))
-
-if __name__ == '__main__':
-    import asyncio
-    asyncio.run(main())
-```
-
 ### 3. Command Implementation (명령어 구현)
 
 #### Slash Command (Discord.js)
@@ -212,32 +145,7 @@ module.exports = {
 };
 ```
 
-#### Slash Command (discord.py)
-
-```python
-# bot/cogs/general.py
-import discord
-from discord import app_commands
-from discord.ext import commands
-
-class General(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-
-    @app_commands.command(name="ping", description="Check bot latency")
-    async def ping(self, interaction: discord.Interaction):
-        latency = round(self.bot.latency * 1000)
-        await interaction.response.send_message(
-            f"🏓 Pong! Latency: {latency}ms"
-        )
-
-async def setup(bot):
-    await bot.add_cog(General(bot))
-```
-
 ### 4. Event Handling (이벤트 처리)
-
-#### Discord.js
 
 ```javascript
 // src/events/interactionCreate.js
@@ -338,7 +246,7 @@ NODE_ENV=development
 
 ### 1. Naming Conventions
 
-- **Variables/Functions**: camelCase (JS) / snake_case (Python)
+- **Variables/Functions**: camelCase
 - **Classes**: PascalCase
 - **Constants**: UPPER_SNAKE_CASE
 - **Files**: kebab-case.js
@@ -436,7 +344,7 @@ async function getUserData(userId) {
 - [ ] 에러 핸들링이 모든 주요 기능에 구현됨
 - [ ] 로깅이 적절히 설정됨
 - [ ] README에 설치 및 실행 방법 작성됨
-- [ ] package.json/requirements.txt가 최신 상태
+- [ ] package.json이 최신 상태
 - [ ] .gitignore에 .env, node_modules 등 포함
 
 ## Notes

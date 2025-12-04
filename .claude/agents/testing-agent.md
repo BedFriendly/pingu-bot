@@ -54,22 +54,6 @@ npm install --save-dev @discord.js/rest discord-api-types
 }
 ```
 
-#### Python (pytest)
-
-```bash
-pip install pytest pytest-asyncio pytest-cov
-```
-
-```ini
-# pytest.ini
-[pytest]
-asyncio_mode = auto
-testpaths = tests
-python_files = test_*.py
-python_classes = Test*
-python_functions = test_*
-```
-
 ### 2. Test Structure
 
 ```
@@ -180,46 +164,6 @@ describe('Helper Functions', () => {
     });
   });
 });
-```
-
-#### Python Test Example (pytest)
-
-```python
-# tests/unit/test_commands.py
-import pytest
-from unittest.mock import AsyncMock, MagicMock
-from bot.cogs.general import General
-
-@pytest.mark.asyncio
-async def test_ping_command():
-    """Test ping command responds with latency"""
-    # Setup
-    bot = MagicMock()
-    bot.latency = 0.05  # 50ms
-    cog = General(bot)
-
-    interaction = AsyncMock()
-
-    # Execute
-    await cog.ping(interaction)
-
-    # Assert
-    interaction.response.send_message.assert_called_once()
-    call_args = interaction.response.send_message.call_args[0][0]
-    assert "Pong!" in call_args
-    assert "50ms" in call_args
-
-@pytest.mark.asyncio
-async def test_ping_command_error_handling():
-    """Test ping command handles errors gracefully"""
-    bot = MagicMock()
-    cog = General(bot)
-
-    interaction = AsyncMock()
-    interaction.response.send_message.side_effect = Exception("API Error")
-
-    with pytest.raises(Exception):
-        await cog.ping(interaction)
 ```
 
 ### 4. Integration Tests (통합 테스트)

@@ -53,7 +53,7 @@ tools: Read, Write, Grep, Glob
 ```markdown
 ## System Architecture
 
-- **봇 프레임워크**: Discord.js / discord.py / 기타
+- **봇 프레임워크**: Discord.js
 - **데이터베이스**: PostgreSQL / MongoDB / SQLite / Redis
 - **배포 환경**: Railway / Heroku / AWS / Self-hosted
 - **외부 API**: 사용할 서드파티 서비스
@@ -140,8 +140,8 @@ tools: Read, Write, Grep, Glob
 
 ## Technology Stack
 
-- Language: JavaScript/TypeScript or Python
-- Framework: Discord.js v14 or discord.py v2
+- Language: JavaScript/TypeScript
+- Framework: Discord.js v14
 - Database: [선택한 DB]
 - Hosting: [선택한 플랫폼]
 
