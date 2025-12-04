@@ -29,22 +29,26 @@ A feature-rich Discord entertainment bot for small servers, built with Discord.j
 ### Steps
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/BedFriendly/pingu-bot.git
 cd pingu-bot
 ```
 
 2. Install dependencies:
+
 ```bash
 yarn install
 ```
 
 3. Create environment file:
+
 ```bash
 cp .env.example .env
 ```
 
 4. Configure your `.env` file:
+
 ```env
 DISCORD_TOKEN=your_bot_token_here
 DISCORD_CLIENT_ID=your_client_id_here
@@ -53,6 +57,7 @@ NODE_ENV=development
 ```
 
 5. Build the project:
+
 ```bash
 yarn build
 ```
@@ -60,16 +65,19 @@ yarn build
 ## 🚀 Running the Bot
 
 ### Development Mode
+
 ```bash
 yarn dev
 ```
 
 ### Production Mode
+
 ```bash
 yarn start
 ```
 
 ### Using PM2 (Production)
+
 ```bash
 yarn pm2:start    # Start the bot
 yarn pm2:stop     # Stop the bot
@@ -147,6 +155,7 @@ This project is licensed under the MIT License.
 ## 👨‍💻 Author
 
 **slo0ey**
+
 - GitHub: [@BedFriendly](https://github.com/BedFriendly)
 - Email: rurchi1206@gmail.com
 

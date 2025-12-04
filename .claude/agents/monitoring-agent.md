@@ -393,13 +393,11 @@ logger.add(
 ### Identified Issues
 
 1. **Slow Database Queries**
-
    - Query: `SELECT * FROM users WHERE...`
    - Avg Time: 850ms
    - Recommendation: Add index on `user_id` column
 
 2. **Memory Leak Detected**
-
    - Memory usage increasing 50MB/hour
    - Likely cause: Event listener not cleaned up
    - Location: `src/events/messageCreate.js`
