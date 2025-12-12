@@ -22,22 +22,22 @@ Pingu Bot is a Discord entertainment bot built with Discord.js v14 and TypeScrip
 
 ```bash
 # Install dependencies
-npm install
+yarn install
 
 # Development mode with auto-restart
-npm run dev
+yarn dev
 
 # Build TypeScript
-npm run build
+yarn build
 
 # Production execution
-npm start
+yarn start
 
 # Linting
-npm run lint
+yarn lint
 
 # Testing
-npm test
+yarn test
 ```
 
 ### Database Commands (Planned)
