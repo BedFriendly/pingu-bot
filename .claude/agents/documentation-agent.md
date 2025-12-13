@@ -127,7 +127,7 @@ Show help information
 
 ## Prerequisites
 
-- Node.js 18+
+- Node.js 20+
 - PostgreSQL 15+
 - Discord Bot Token
 

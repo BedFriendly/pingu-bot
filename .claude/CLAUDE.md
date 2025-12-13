@@ -10,7 +10,7 @@ Pingu Bot is a Discord entertainment bot built with Discord.js v14 and TypeScrip
 
 - Discord.js v14
 - TypeScript 5.x
-- Node.js 18+
+- Node.js 20+
 - SQLite (initial), PostgreSQL (future migration)
 - Node-cache for caching
 

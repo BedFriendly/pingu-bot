@@ -39,7 +39,7 @@ tools: Read, Write, Edit, Grep, Glob, Bash
 
 ```dockerfile
 # Dockerfile
-FROM node:18-alpine
+FROM node:20-alpine
 
 # 작업 디렉토리 설정
 WORKDIR /app
@@ -128,7 +128,7 @@ on:
     branches: [main, develop]
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
 
 jobs:
   # 1. 린트 및 테스트
@@ -556,7 +556,7 @@ Railway는 Dockerfile이 없어도 자동으로 빌드 가능:
 
 # Nixpacks 설정 파일 (nixpacks.toml)
 [phases.setup]
-nixPkgs = ["nodejs-18_x"]
+nixPkgs = ["nodejs-20_x"]
 
 [phases.install]
 cmds = ["npm ci"]

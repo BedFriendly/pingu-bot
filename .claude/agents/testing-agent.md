@@ -362,7 +362,7 @@ test('description', () => {
 
 **Environment**:
 
-- Node.js version: 18.x
+- Node.js version: 20.x
 - Discord.js version: 14.x
 - OS: Ubuntu 22.04
 

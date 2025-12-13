@@ -4,7 +4,7 @@
 
 ### Core
 
-- **Runtime**: Node.js 18+
+- **Runtime**: Node.js 20+
 - **Language**: TypeScript 5.x
 - **Bot Framework**: Discord.js v14
 - **Package Manager**: yarn

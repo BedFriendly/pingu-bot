@@ -197,7 +197,7 @@
 
 - Discord.js v14
 - TypeScript
-- Node.js 18+
+- Node.js 20+
 - 데이터베이스 (SQLite 또는 PostgreSQL)
 
 ### 선택

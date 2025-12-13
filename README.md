@@ -12,7 +12,7 @@ A feature-rich Discord entertainment bot for small servers, built with Discord.j
 
 ## 🛠️ Tech Stack
 
-- **Runtime**: Node.js 18+
+- **Runtime**: Node.js 20+
 - **Language**: TypeScript 5.x
 - **Framework**: Discord.js v14
 - **Database**: SQLite (better-sqlite3)
@@ -22,7 +22,7 @@ A feature-rich Discord entertainment bot for small servers, built with Discord.j
 
 ### Prerequisites
 
-- Node.js 18+ installed
+- Node.js 20+ installed
 - Yarn package manager
 - Discord Bot Token ([Get one here](https://discord.com/developers/applications))
 
