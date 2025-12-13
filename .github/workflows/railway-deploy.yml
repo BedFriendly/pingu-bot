@@ -88,7 +88,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
           railway up --detach
 
       - name: 배포 상태 확인
@@ -125,7 +125,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
           railway up --environment staging --detach
 
       - name: 배포 상태 확인

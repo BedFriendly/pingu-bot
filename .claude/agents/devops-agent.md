@@ -203,7 +203,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
           railway up --detach
 
       - name: Verify deployment
@@ -233,7 +233,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
           railway up --environment staging --detach
 
       - name: Verify deployment
@@ -261,13 +261,8 @@ Railway는 GitHub 저장소와 직접 연동하여 자동 배포 가능:
 ```yaml
 # railway.json에서 배포 조건 설정
 {
-  "build": {
-    "builder": "DOCKERFILE"
-  },
-  "deploy": {
-    "triggerOnPush": true,
-    "branch": "main"
-  }
+  'build': { 'builder': 'DOCKERFILE' },
+  'deploy': { 'triggerOnPush': true, 'branch': 'main' },
 }
 ```
 
@@ -303,7 +298,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
           railway up --environment ${{ github.event.inputs.environment }} --detach
           railway logs --tail 50
 ```
@@ -792,7 +787,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
           DATABASE_URL=$(railway variables get DATABASE_URL)
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           pg_dump $DATABASE_URL | gzip > backup_$TIMESTAMP.sql.gz
