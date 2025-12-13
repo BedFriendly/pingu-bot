@@ -1,4 +1,8 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
+import {
+  SlashCommandBuilder,
+  ChatInputCommandInteraction,
+  MessageFlags,
+} from 'discord.js';
 import { Command } from '../../types/command';
 
 const command: Command = {
@@ -10,11 +14,12 @@ const command: Command = {
   execute: async (interaction: ChatInputCommandInteraction) => {
     const sent = await interaction.reply({
       content: '🏓 Pinging...',
-      fetchReply: true,
+      flags: MessageFlags.Ephemeral,
+      withResponse: true,
     });
 
     const roundtripLatency =
-      sent.createdTimestamp - interaction.createdTimestamp;
+      sent.interaction.createdTimestamp - interaction.createdTimestamp;
     const apiLatency = Math.round(interaction.client.ws.ping);
 
     await interaction.editReply({

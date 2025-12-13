@@ -133,9 +133,10 @@ module.exports = {
   async execute(interaction) {
     const sent = await interaction.reply({
       content: 'Pinging...',
-      fetchReply: true,
+      withResponse: true,
     });
-    const latency = sent.createdTimestamp - interaction.createdTimestamp;
+    const latency =
+      sent.interaction.createdTimestamp - interaction.createdTimestamp;
     await interaction.editReply(
       `🏓 Pong! Latency: ${latency}ms | API Latency: ${Math.round(
         interaction.client.ws.ping
@@ -157,19 +158,17 @@ module.exports = {
     const command = interaction.client.commands.get(interaction.commandName);
 
     if (!command) {
-      console.error(
-        `No command matching ${interaction.commandName} was found.`
-      );
+      logger.error(`No command matching ${interaction.commandName} was found.`);
       return;
     }
 
     try {
       await command.execute(interaction);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       const message = {
         content: 'There was an error while executing this command!',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       };
       if (interaction.replied || interaction.deferred) {
         await interaction.followUp(message);
@@ -213,14 +212,14 @@ module.exports = { getGuildConfig, updateGuildConfig };
 ```javascript
 // src/utils/errorHandler.js
 function handleError(error, context) {
-  console.error(`Error in ${context}:`, error);
+  logger.error(`Error in ${context}:`, error);
 
   // 에러 로깅 (파일 또는 외부 서비스)
   // logToFile(error, context);
 
   return {
     content: '❌ An error occurred while processing your request.',
-    ephemeral: true,
+    flags: MessageFlags.Ephemeral,
   };
 }
 
@@ -265,7 +264,7 @@ NODE_ENV=development
 try {
   await riskyOperation();
 } catch (error) {
-  console.error('Error:', error);
+  logger.error('Error:', error);
   // 사용자에게 친절한 에러 메시지
 }
 ```
@@ -286,7 +285,6 @@ async function getUserData(userId) {
 ## Performance Best Practices
 
 1. **Rate Limiting 고려**
-
    - Discord API rate limits 준수
    - 과도한 API 호출 방지
 
