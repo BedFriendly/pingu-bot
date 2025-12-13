@@ -1,6 +1,6 @@
 import { Client } from 'discord.js';
 import { BotEvent } from '../types/event';
-import logger from '../utils/logger';
+import { logger } from '../utils/logger';
 
 const event: BotEvent = {
   name: 'ready',

@@ -1,5 +1,5 @@
 import { PinguBot } from './bot';
-import logger from './utils/logger';
+import { logger } from './utils/logger';
 
 const bot = new PinguBot();
 

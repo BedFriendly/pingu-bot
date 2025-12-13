@@ -10,7 +10,7 @@ import path from 'path';
 import { Command } from './types/command';
 import { BotEvent } from './types/event';
 import { config } from './config/config';
-import logger from './utils/logger';
+import { logger } from './utils/logger';
 
 export class PinguBot extends Client {
   public commands: Collection<string, Command>;

@@ -2,7 +2,7 @@
 import { Collection, Interaction } from 'discord.js';
 import { BotEvent } from '../types/event';
 import { PinguBot } from '../bot';
-import logger from '../utils/logger';
+import { logger } from '../utils/logger';
 
 const event: BotEvent = {
   name: 'interactionCreate',
@@ -13,9 +13,7 @@ const event: BotEvent = {
     const command = client.commands.get(interaction.commandName);
 
     if (!command) {
-      logger.error(
-        `No command matching ${interaction.commandName} was found.`
-      );
+      logger.error(`No command matching ${interaction.commandName} was found.`);
       return;
     }
 
