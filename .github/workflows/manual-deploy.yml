@@ -1,0 +1,45 @@
+name: 수동 배포
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '배포 환경 선택'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  deploy:
+    name: ${{ github.event.inputs.environment }} 환경에 배포
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment }}
+      url: https://railway.app
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Railway CLI 설치
+        run: npm install -g @railway/cli
+
+      - name: Railway 배포
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway up --environment ${{ github.event.inputs.environment }} --detach
+
+      - name: 배포 로그 확인
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway logs --environment ${{ github.event.inputs.environment }} --tail 100
+
+      - name: 배포 완료
+        run: |
+          echo "✅ ${{ github.event.inputs.environment }} 환경에 배포가 완료되었습니다!"
+          echo "Railway 대시보드에서 상태를 확인하세요: https://railway.app"
