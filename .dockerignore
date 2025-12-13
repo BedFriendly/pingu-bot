@@ -1,0 +1,61 @@
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# TypeScript
+*.ts
+!*.d.ts
+tsconfig.json
+src
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Testing
+tests
+*.test.ts
+*.spec.ts
+coverage
+
+# Documentation
+*.md
+!README.md
+docs
+
+# CI/CD
+.github
+
+# Build artifacts
+dist
+
+# Logs
+logs
+*.log
+
+# Database (로컬 개발용)
+data/*.db
+data/*.db-shm
+data/*.db-wal
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PM2
+ecosystem.config.js
