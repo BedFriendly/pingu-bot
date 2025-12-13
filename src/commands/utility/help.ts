@@ -6,6 +6,7 @@ import {
 import { Command } from '../../types/command';
 import { PinguBot } from '../../bot';
 import { CONSTANTS } from '../../config/constants';
+import { UserModel } from '../../database/models';
 
 const command: Command = {
   data: new SlashCommandBuilder()
@@ -14,6 +15,17 @@ const command: Command = {
   category: 'utility',
   execute: async (interaction: ChatInputCommandInteraction) => {
     const client = interaction.client as PinguBot;
+
+    // 사용자 정보 가져오기
+    let userInfo = '';
+    try {
+      const user = await UserModel.findById(interaction.user.id);
+      if (user) {
+        userInfo = `\n💰 Coins: **${user.coins} PC** | ⬆️ Level: **${user.level}** (${user.experience} XP)`;
+      }
+    } catch {
+      // 데이터베이스 오류는 무시
+    }
 
     // Group commands by category
     const categories: Record<string, Command[]> = {
@@ -30,7 +42,7 @@ const command: Command = {
 
     const embed = new EmbedBuilder()
       .setTitle('🐧 Pingu Bot - Help')
-      .setDescription('Here are all available commands:')
+      .setDescription(`Here are all available commands:${userInfo}`)
       .setColor(CONSTANTS.COLORS.INFO)
       .setTimestamp();
 

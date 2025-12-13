@@ -2,6 +2,7 @@ import {
   SlashCommandBuilder,
   ChatInputCommandInteraction,
   PermissionResolvable,
+  SlashCommandOptionsOnlyBuilder,
 } from 'discord.js';
 
 export type CommandCategory =
@@ -12,7 +13,7 @@ export type CommandCategory =
   | 'utility';
 
 export interface Command {
-  data: SlashCommandBuilder;
+  data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
   category: CommandCategory;
   cooldown?: number; // in seconds
   permissions?: PermissionResolvable[];

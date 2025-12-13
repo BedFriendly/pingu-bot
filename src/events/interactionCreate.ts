@@ -3,6 +3,7 @@ import { Collection, Interaction } from 'discord.js';
 import { BotEvent } from '../types/event';
 import { PinguBot } from '../bot';
 import { logger } from '../utils/logger';
+import { UserModel, GuildModel } from '../database/models';
 
 const event: BotEvent = {
   name: 'interactionCreate',
@@ -15,6 +16,26 @@ const event: BotEvent = {
     if (!command) {
       logger.error(`No command matching ${interaction.commandName} was found.`);
       return;
+    }
+
+    // 사용자 및 길드 자동 생성/조회
+    try {
+      // 사용자가 데이터베이스에 없으면 생성
+      await UserModel.findOrCreate(
+        interaction.user.id,
+        interaction.user.username
+      );
+
+      // 길드에서 실행된 경우 길드도 생성
+      if (interaction.guild) {
+        await GuildModel.findOrCreate(
+          interaction.guild.id,
+          interaction.guild.name
+        );
+      }
+    } catch (error) {
+      logger.error('Error ensuring user/guild exists in database:', error);
+      // 데이터베이스 오류가 발생해도 커맨드는 계속 실행
     }
 
     // Cooldown handling
