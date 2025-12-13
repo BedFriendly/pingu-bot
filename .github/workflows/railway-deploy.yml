@@ -73,6 +73,7 @@ jobs:
     name: Railway 프로덕션 배포
     needs: [test, build]
     runs-on: ubuntu-latest
+    container: ghcr.io/railwayapp/cli:latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment:
       name: production
@@ -80,9 +81,6 @@ jobs:
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v4
-
-      - name: Railway CLI 설치
-        run: npm install -g @railway/cli
 
       - name: Railway 프로덕션 배포
         env:
@@ -110,6 +108,7 @@ jobs:
     name: Railway 스테이징 배포
     needs: [test, build]
     runs-on: ubuntu-latest
+    container: ghcr.io/railwayapp/cli:latest
     if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
     environment:
       name: staging
@@ -117,9 +116,6 @@ jobs:
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v4
-
-      - name: Railway CLI 설치
-        run: npm install -g @railway/cli
 
       - name: Railway 스테이징 배포
         env:
