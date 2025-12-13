@@ -85,8 +85,10 @@ jobs:
       - name: Railway 프로덕션 배포
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          PROJECT: pingu-bot
+          SERVICE: pingu-bot
         run: |
-          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway link --project ${{ env.PROJECT }} --environment production --service ${{ env.SERVICE }}
           railway up --detach
 
       - name: 배포 상태 확인
