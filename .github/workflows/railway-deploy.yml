@@ -87,7 +87,7 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: pingu-bot
         run: |
-          railway up --detach --environment production
+          railway up --detach --environment production --service ${{ env.RAILWAY_SERVICE }}
 
       - name: 배포 상태 확인
         env:
@@ -122,7 +122,7 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: pingu-bot
         run: |
-          railway up --detach --environment staging
+          railway up --detach --environment staging --service ${{ env.RAILWAY_SERVICE }}
 
       - name: 배포 상태 확인
         env:
