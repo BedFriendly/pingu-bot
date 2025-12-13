@@ -99,7 +99,8 @@ jobs:
       - name: 배포 로그 확인 (최근 50줄)
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway logs --tail 50
+          RAILWAY_SERVICE: pingu-bot
+        run: railway logs --tail 50 --service ${{ env.RAILWAY_SERVICE }}
 
   # ============================================
   # Job 4: Railway 스테이징 배포 (develop 브랜치)
