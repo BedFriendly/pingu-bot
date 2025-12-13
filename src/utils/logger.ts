@@ -28,7 +28,11 @@ class Logger {
     return LOG_LEVELS[level] <= this.level;
   }
 
-  private formatMessage(level: LogLevel, message: string, data?: any): string {
+  private formatMessage(
+    level: LogLevel,
+    message: string,
+    data?: unknown
+  ): string {
     const timestamp = new Date().toISOString();
     const levelTag = level.toUpperCase().padEnd(5);
     let formatted = `[${timestamp}] [${levelTag}] ${message}`;
@@ -40,7 +44,7 @@ class Logger {
     return formatted;
   }
 
-  error(message: string, error?: Error | any): void {
+  error(message: string, error?: Error | unknown): void {
     if (!this.shouldLog('error')) return;
 
     const formatted = this.formatMessage('error', message);
@@ -55,21 +59,21 @@ class Logger {
     }
   }
 
-  warn(message: string, data?: any): void {
+  warn(message: string, data?: unknown): void {
     if (!this.shouldLog('warn')) return;
 
     const formatted = this.formatMessage('warn', message, data);
     console.warn(`${COLORS.yellow}${formatted}${COLORS.reset}`);
   }
 
-  info(message: string, data?: any): void {
+  info(message: string, data?: unknown): void {
     if (!this.shouldLog('info')) return;
 
     const formatted = this.formatMessage('info', message, data);
     console.log(`${COLORS.blue}${formatted}${COLORS.reset}`);
   }
 
-  debug(message: string, data?: any): void {
+  debug(message: string, data?: unknown): void {
     if (!this.shouldLog('debug')) return;
 
     const formatted = this.formatMessage('debug', message, data);
