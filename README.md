@@ -70,13 +70,13 @@ yarn build
 yarn dev
 ```
 
-### Production Mode
+### Production Mode (Local)
 
 ```bash
 yarn start
 ```
 
-### Using PM2 (Production)
+### Using PM2 (Local Production)
 
 ```bash
 yarn pm2:start    # Start the bot
@@ -84,6 +84,35 @@ yarn pm2:stop     # Stop the bot
 yarn pm2:restart  # Restart the bot
 yarn pm2:logs     # View logs
 ```
+
+### Deploy to Railway (Recommended)
+
+Railway는 프로덕션 배포를 위한 권장 플랫폼입니다.
+
+**빠른 시작:**
+
+```bash
+# Railway CLI 설치
+npm install -g @railway/cli
+
+# Railway 로그인
+railway login
+
+# 프로젝트 초기화
+railway init
+
+# 환경 변수 설정
+railway variables set DISCORD_TOKEN="your_token"
+railway variables set DISCORD_CLIENT_ID="your_client_id"
+
+# 배포
+railway up
+```
+
+**자세한 배포 가이드:**
+
+- [Railway 빠른 시작 가이드](docs/QUICK_START_RAILWAY.md)
+- [전체 배포 문서](docs/DEPLOYMENT.md)
 
 ## 📝 Available Scripts
 
@@ -140,9 +169,17 @@ See `ecosystem.config.js` for PM2 configuration options.
 
 ## 📖 Documentation
 
-- [Feature Specification](docs/FEATURE_SPEC.md)
-- [Architecture Design](docs/ARCHITECTURE.md)
-- [Development Roadmap](docs/ROADMAP.md)
+### 기획 & 설계
+
+- [Feature Specification](docs/FEATURE_SPEC.md) - 기능 명세서
+- [Architecture Design](docs/ARCHITECTURE.md) - 아키텍처 설계
+- [Development Roadmap](docs/ROADMAP.md) - 개발 로드맵
+
+### 배포 & 운영
+
+- [Railway 빠른 시작](docs/QUICK_START_RAILWAY.md) - 5분 안에 배포하기
+- [Railway 배포 가이드](docs/DEPLOYMENT.md) - 전체 배포 프로세스
+- [백업 스크립트](scripts/railway-backup.sh) - 데이터베이스 백업
 
 ## 🤝 Contributing
 
