@@ -5,10 +5,8 @@ yarn-error.log
 package-lock.json
 
 # TypeScript
-*.ts
-!*.d.ts
-tsconfig.json
-src
+# src 폴더와 tsconfig.json은 빌더 스테이지에서만 필요
+# 프로덕션 스테이지에는 빌드된 dist 폴더만 복사됨
 
 # Environment
 .env
@@ -41,7 +39,7 @@ docs
 # CI/CD
 .github
 
-# Build artifacts
+# Build artifacts (빌더 스테이지에서 생성되므로 제외)
 dist
 
 # Logs

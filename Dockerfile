@@ -3,7 +3,7 @@
 # ==============================
 
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # 작업 디렉토리 설정
 WORKDIR /app
@@ -24,7 +24,7 @@ COPY . .
 RUN yarn build
 
 # Production stage
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -41,9 +41,13 @@ COPY package.json yarn.lock ./
 # 프로덕션 의존성만 설치
 RUN yarn install --production --frozen-lockfile && yarn cache clean
 
-# 빌드된 파일 복사
+# 빌드된 JavaScript 파일만 복사 (TypeScript 파일 제외)
 COPY --from=builder /app/dist ./dist
 
+# .ts 파일이 혹시 남아있다면 제거 (프로덕션에서는 .js만 필요)
+RUN find /app/dist -name "*.ts" ! -name "*.d.ts" -type f -delete || true
+
+# .env 파일은 Railway 환경 변수를 사용하므로 복사 불필요
 # 데이터 디렉토리 생성 (SQLite용)
 RUN mkdir -p /app/data && chown -R pingubot:nodejs /app
 

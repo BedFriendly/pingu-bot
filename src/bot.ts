@@ -64,7 +64,7 @@ export class PinguBot extends Client {
 
       const commandFiles = fs
         .readdirSync(categoryPath)
-        .filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
+        .filter((file) => file.endsWith('.js'));
 
       for (const file of commandFiles) {
         const filePath = path.join(categoryPath, file);
@@ -94,12 +94,7 @@ export class PinguBot extends Client {
 
     const eventFiles = fs
       .readdirSync(eventsPath)
-      .filter(
-        (file) =>
-          (file.endsWith('.ts') || file.endsWith('.js')) &&
-          file !== 'index.ts' &&
-          file !== 'index.js'
-      );
+      .filter((file) => file.endsWith('.js') && file !== 'index.js');
 
     for (const file of eventFiles) {
       const filePath = path.join(eventsPath, file);
