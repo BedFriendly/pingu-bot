@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Collection, Interaction } from 'discord.js';
 import { BotEvent } from '../types/event';
 import { PinguBot } from '../bot';
