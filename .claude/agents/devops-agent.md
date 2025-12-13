@@ -183,65 +183,39 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # 3. Railway 배포 (main 브랜치만)
+  # 3. Railway 배포
   deploy-production:
-    name: Deploy to Railway (Production)
+    name: Railway 프로덕션 배포
     needs: [test, build]
     runs-on: ubuntu-latest
+    container: ghcr.io/railwayapp/cli:latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment:
       name: production
       url: https://railway.app
     steps:
-      - name: Checkout code
+      - name: 코드 체크아웃
         uses: actions/checkout@v4
 
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
-      - name: Deploy to Railway
+      - name: Railway 프로덕션 배포
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: pingu-bot
         run: |
-          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
-          railway up --detach
+          railway up --detach --environment production --service ${{ env.RAILWAY_SERVICE }}
 
-      - name: Verify deployment
+      - name: 배포 상태 확인
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
           railway status
-          echo "Deployment completed successfully!"
+          echo "✅ 프로덕션 배포가 완료되었습니다!"
 
-  # 4. Railway 배포 (develop 브랜치 - staging)
-  deploy-staging:
-    name: Deploy to Railway (Staging)
-    needs: [test, build]
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-    environment:
-      name: staging
-      url: https://railway.app
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
-      - name: Deploy to Railway Staging
+      - name: 배포 로그 확인 (최근 50줄)
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
-          railway up --environment staging --detach
-
-      - name: Verify deployment
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway status --environment staging
-          echo "Staging deployment completed!"
+          RAILWAY_SERVICE: pingu-bot
+        run: railway logs --tail 50 --service ${{ env.RAILWAY_SERVICE }}
 ```
 
 #### Railway 자동 배포 (GitHub 연동)
