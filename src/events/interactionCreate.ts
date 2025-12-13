@@ -2,6 +2,7 @@
 import { Collection, Interaction } from 'discord.js';
 import { BotEvent } from '../types/event';
 import { PinguBot } from '../bot';
+import logger from '../utils/logger';
 
 const event: BotEvent = {
   name: 'interactionCreate',
@@ -12,7 +13,7 @@ const event: BotEvent = {
     const command = client.commands.get(interaction.commandName);
 
     if (!command) {
-      console.error(
+      logger.error(
         `No command matching ${interaction.commandName} was found.`
       );
       return;
@@ -51,11 +52,11 @@ const event: BotEvent = {
     // Execute command
     try {
       await command.execute(interaction);
-      console.log(
+      logger.info(
         `✓ ${interaction.user.tag} used /${command.data.name} in ${interaction.guild?.name || 'DM'}`
       );
     } catch (error) {
-      console.error(`Error executing command ${command.data.name}:`, error);
+      logger.error(`Error executing command ${command.data.name}:`, error);
 
       const errorMessage = {
         content: '❌ An error occurred while executing this command.',

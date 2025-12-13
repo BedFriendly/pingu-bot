@@ -10,6 +10,7 @@ import path from 'path';
 import { Command } from './types/command';
 import { BotEvent } from './types/event';
 import { config } from './config/config';
+import logger from './utils/logger';
 
 export class PinguBot extends Client {
   public commands: Collection<string, Command>;
@@ -31,16 +32,16 @@ export class PinguBot extends Client {
 
   public async start(): Promise<void> {
     try {
-      console.log('Starting Pingu Bot...');
+      logger.info('Starting Pingu Bot...');
 
       await this.loadCommands();
       await this.loadEvents();
       await this.registerSlashCommands();
       await this.login(config.discord.token);
 
-      console.log('Pingu Bot started successfully!');
+      logger.info('Pingu Bot started successfully!');
     } catch (error) {
-      console.error('Failed to start bot:', error);
+      logger.error('Failed to start bot:', error);
       process.exit(1);
     }
   }
@@ -72,23 +73,23 @@ export class PinguBot extends Client {
 
         if ('data' in command && 'execute' in command) {
           this.commands.set(command.data.name, command);
-          console.log(`Loaded command: ${command.data.name} (${category})`);
+          logger.info(`Loaded command: ${command.data.name} (${category})`);
         } else {
-          console.warn(
+          logger.warn(
             `Warning: Command at ${filePath} is missing required "data" or "execute" property.`
           );
         }
       }
     }
 
-    console.log(`Loaded ${this.commands.size} commands`);
+    logger.info(`Loaded ${this.commands.size} commands`);
   }
 
   private async loadEvents(): Promise<void> {
     const eventsPath = path.join(__dirname, 'events');
 
     if (!fs.existsSync(eventsPath)) {
-      console.warn('Events directory not found, skipping event loading');
+      logger.warn('Events directory not found, skipping event loading');
       return;
     }
 
@@ -106,10 +107,10 @@ export class PinguBot extends Client {
         this.on(event.name, (...args) => event.execute(...args));
       }
 
-      console.log(`Loaded event: ${event.name}`);
+      logger.info(`Loaded event: ${event.name}`);
     }
 
-    console.log(`Loaded ${eventFiles.length} events`);
+    logger.info(`Loaded ${eventFiles.length} events`);
   }
 
   private async registerSlashCommands(): Promise<void> {
@@ -120,7 +121,7 @@ export class PinguBot extends Client {
 
       const rest = new REST({ version: '10' }).setToken(config.discord.token);
 
-      console.log(
+      logger.info(
         `Started refreshing ${commands.length} application (/) commands.`
       );
 
@@ -128,11 +129,11 @@ export class PinguBot extends Client {
         body: commands,
       });
 
-      console.log(
+      logger.info(
         `Successfully reloaded ${commands.length} application (/) commands.`
       );
     } catch (error) {
-      console.error('Error registering slash commands:', error);
+      logger.error('Error registering slash commands:', error);
       throw error;
     }
   }

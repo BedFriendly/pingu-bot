@@ -1,5 +1,6 @@
 import { Client } from 'discord.js';
 import { BotEvent } from '../types/event';
+import logger from '../utils/logger';
 
 const event: BotEvent = {
   name: 'ready',
@@ -7,10 +8,10 @@ const event: BotEvent = {
   execute: async (client: Client) => {
     if (!client.user) return;
 
-    console.log(`✅ Logged in as ${client.user.tag}`);
-    console.log(`📊 Serving ${client.guilds.cache.size} guilds`);
-    console.log(`👥 Total users: ${client.users.cache.size}`);
-    console.log('🐧 Pingu Bot is ready!');
+    logger.info(`✅ Logged in as ${client.user.tag}`);
+    logger.info(`📊 Serving ${client.guilds.cache.size} guilds`);
+    logger.info(`👥 Total users: ${client.users.cache.size}`);
+    logger.info('🐧 Pingu Bot is ready!');
 
     client.user.setActivity('with penguins 🐧', { type: 0 });
   },
