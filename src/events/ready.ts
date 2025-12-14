@@ -3,8 +3,8 @@ import { BotEvent } from '../types/event';
 import { logger } from '../utils/logger';
 import { db } from '../database';
 
-const event: BotEvent = {
-  name: 'ready',
+const event: BotEvent<'clientReady'> = {
+  name: 'clientReady',
   once: true,
   execute: async (client: Client) => {
     if (!client.user) return;

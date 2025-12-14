@@ -5,7 +5,7 @@ import { PinguBot } from '../bot';
 import { logger } from '../utils/logger';
 import { UserModel, GuildModel } from '../database/models';
 
-const event: BotEvent = {
+const event: BotEvent<'interactionCreate'> = {
   name: 'interactionCreate',
   execute: async (interaction: Interaction) => {
     if (!interaction.isChatInputCommand()) return;
