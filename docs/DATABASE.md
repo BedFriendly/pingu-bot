@@ -15,6 +15,7 @@ Pingu Bot의 PostgreSQL 데이터베이스 구축 및 관리 가이드입니다.
 ### 테이블 구조
 
 #### users
+
 - `user_id` (VARCHAR(20), PK): 디스코드 사용자 ID
 - `username` (VARCHAR(32)): 사용자 이름
 - `coins` (INTEGER): 보유 코인 (PC)
@@ -27,6 +28,7 @@ Pingu Bot의 PostgreSQL 데이터베이스 구축 및 관리 가이드입니다.
 - `updated_at` (TIMESTAMP): 수정 시간
 
 #### guilds
+
 - `guild_id` (VARCHAR(20), PK): 디스코드 길드 ID
 - `guild_name` (VARCHAR(100)): 길드 이름
 - `prefix` (VARCHAR(10)): 명령어 접두사
@@ -37,6 +39,7 @@ Pingu Bot의 PostgreSQL 데이터베이스 구축 및 관리 가이드입니다.
 - `updated_at` (TIMESTAMP): 수정 시간
 
 #### game_stats
+
 - `id` (SERIAL, PK): 게임 기록 ID
 - `user_id` (VARCHAR(20), FK): 사용자 ID
 - `game_type` (VARCHAR(20)): 게임 타입 (rps, coinflip, guess, dice)
@@ -46,6 +49,7 @@ Pingu Bot의 PostgreSQL 데이터베이스 구축 및 관리 가이드입니다.
 - `played_at` (TIMESTAMP): 게임 플레이 시간
 
 #### cooldowns
+
 - `id` (SERIAL, PK): 쿨다운 ID
 - `user_id` (VARCHAR(20)): 사용자 ID
 - `command_name` (VARCHAR(50)): 명령어 이름
@@ -56,6 +60,7 @@ Pingu Bot의 PostgreSQL 데이터베이스 구축 및 관리 가이드입니다.
 ### 1. PostgreSQL 설치
 
 #### Windows
+
 ```bash
 # Chocolatey 사용
 choco install postgresql
@@ -65,6 +70,7 @@ choco install postgresql
 ```
 
 #### macOS
+
 ```bash
 # Homebrew 사용
 brew install postgresql@16
@@ -72,6 +78,7 @@ brew services start postgresql@16
 ```
 
 #### Linux (Ubuntu/Debian)
+
 ```bash
 sudo apt update
 sudo apt install postgresql postgresql-contrib
@@ -104,6 +111,7 @@ DATABASE_URL=postgresql://username:password@localhost:5432/pingu_bot
 ```
 
 예시:
+
 ```env
 # 기본 postgres 사용자 사용
 DATABASE_URL=postgresql://postgres:your_password@localhost:5432/pingu_bot
@@ -128,6 +136,7 @@ npm run migrate
 ```
 
 마이그레이션은 다음 작업을 수행합니다:
+
 1. 데이터베이스 연결 확인
 2. `migrations` 테이블 생성 (이미 실행된 마이그레이션 추적용)
 3. 모든 테이블 생성 (users, guilds, game_stats, cooldowns)
@@ -211,10 +220,11 @@ const user = await UserModel.findOrCreate('123456789', 'PinguUser');
 await UserModel.addCoins(user.user_id, 100);
 
 // 경험치 추가 (레벨업 자동 처리)
-const { user: updatedUser, leveledUp, newLevel } = await UserModel.addExperience(
-  user.user_id,
-  50
-);
+const {
+  user: updatedUser,
+  leveledUp,
+  newLevel,
+} = await UserModel.addExperience(user.user_id, 50);
 
 if (leveledUp) {
   console.log(`레벨업! 새 레벨: ${newLevel}`);

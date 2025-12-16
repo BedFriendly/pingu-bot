@@ -7,14 +7,17 @@ Pingu Bot의 PostgreSQL 데이터베이스 통합이 완료되었습니다. 이 
 ### 변경된 파일
 
 #### 1. 핵심 봇 파일
+
 - **src/index.ts**: 데이터베이스 연결 종료 처리 추가
 - **src/bot.ts**: 데이터베이스 초기화 메서드 추가
 
 #### 2. 이벤트 핸들러
+
 - **src/events/ready.ts**: 데이터베이스 연결 상태 확인
 - **src/events/interactionCreate.ts**: 사용자/길드 자동 생성
 
 #### 3. 커맨드
+
 - **src/commands/utility/ping.ts**: 데이터베이스 레이턴시 측정 추가
 - **src/commands/utility/help.ts**: 사용자 정보(코인, 레벨) 표시 추가
 - **src/commands/economy/balance.ts**: 사용자 정보 조회 커맨드 (신규)
@@ -24,6 +27,7 @@ Pingu Bot의 PostgreSQL 데이터베이스 통합이 완료되었습니다. 이 
 ### 1. 봇 시작 시 데이터베이스 연결
 
 봇이 시작될 때 자동으로:
+
 - 데이터베이스 연결 확인
 - 연결 실패 시 에러와 함께 봇 종료
 - 연결 성공 시 로그 출력
@@ -45,6 +49,7 @@ private async initializeDatabase(): Promise<void> {
 ### 2. 사용자/길드 자동 생성
 
 커맨드 실행 시 자동으로:
+
 - 사용자가 데이터베이스에 없으면 생성
 - 길드에서 실행된 경우 길드도 생성
 - 기본값으로 초기화 (코인: 0, 레벨: 1 등)
@@ -61,6 +66,7 @@ if (interaction.guild) {
 ### 3. Graceful Shutdown
 
 봇 종료 시 자동으로:
+
 - Discord 연결 종료
 - 데이터베이스 연결 풀 종료
 - 진행 중인 쿼리 완료 대기
@@ -175,10 +181,10 @@ import { db } from '../../database';
 
 await db.transaction(async (client) => {
   // 코인 차감
-  await client.query(
-    'UPDATE users SET coins = coins - $1 WHERE user_id = $2',
-    [betAmount, userId]
-  );
+  await client.query('UPDATE users SET coins = coins - $1 WHERE user_id = $2', [
+    betAmount,
+    userId,
+  ]);
 
   // 게임 기록 생성
   await client.query(
@@ -199,6 +205,7 @@ await db.transaction(async (client) => {
 ### 1. /ping 커맨드
 
 데이터베이스 레이턴시 측정:
+
 ```
 🏓 Pong!
 📡 Roundtrip Latency: `45ms`
@@ -209,6 +216,7 @@ await db.transaction(async (client) => {
 ### 2. /help 커맨드
 
 사용자 정보 표시:
+
 ```
 Here are all available commands:
 💰 Coins: **1000 PC** | ⬆️ Level: **5** (750 XP)
@@ -217,6 +225,7 @@ Here are all available commands:
 ### 3. /balance 커맨드
 
 상세한 사용자 정보:
+
 ```
 💰 PinguUser님의 정보
 
@@ -344,6 +353,7 @@ await db.query('INSERT INTO game_stats (...) VALUES (...)', [...]);
 ### 4. 인덱스 활용
 
 자주 조회하는 컬럼에는 인덱스가 이미 설정되어 있습니다:
+
 - users.coins (DESC)
 - users.level (DESC)
 - users.total_wins (DESC)
