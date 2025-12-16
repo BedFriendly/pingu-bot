@@ -1,0 +1,82 @@
+// Pingu Bot Prisma Schema
+// 디스코드 봇 데이터베이스 스키마 정의
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_PATH")
+}
+
+// 사용자 모델
+model User {
+  userId     String    @id @map("user_id") @db.VarChar(20)
+  username   String    @db.VarChar(32)
+  coins      Int       @default(0)
+  experience Int       @default(0)
+  level      Int       @default(1)
+  totalWins  Int       @default(0) @map("total_wins")
+  totalGames Int       @default(0) @map("total_games")
+  lastDaily  DateTime? @map("last_daily") @db.Timestamptz
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  // 관계
+  gameStats GameStat[]
+  cooldowns Cooldown[]
+
+  @@index([coins(sort: Desc)])
+  @@index([level(sort: Desc)])
+  @@index([totalWins(sort: Desc)])
+  @@map("users")
+}
+
+// 길드(서버) 모델
+model Guild {
+  guildId          String   @id @map("guild_id") @db.VarChar(20)
+  guildName        String   @map("guild_name") @db.VarChar(100)
+  prefix           String   @default("!") @db.VarChar(10)
+  levelChannelId   String?  @map("level_channel_id") @db.VarChar(20)
+  welcomeChannelId String?  @map("welcome_channel_id") @db.VarChar(20)
+  language         String   @default("ko") @db.VarChar(5)
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("guilds")
+}
+
+// 게임 통계 모델
+model GameStat {
+  id        Int      @id @default(autoincrement())
+  userId    String   @map("user_id") @db.VarChar(20)
+  gameType  String   @map("game_type") @db.VarChar(20)
+  result    String   @db.VarChar(10)
+  betAmount Int      @map("bet_amount")
+  profit    Int
+  playedAt  DateTime @default(now()) @map("played_at") @db.Timestamptz
+
+  // 관계
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([playedAt(sort: Desc)])
+  @@map("game_stats")
+}
+
+// 쿨다운 모델
+model Cooldown {
+  id          Int      @id @default(autoincrement())
+  userId      String   @map("user_id") @db.VarChar(20)
+  commandName String   @map("command_name") @db.VarChar(50)
+  expiresAt   DateTime @map("expires_at") @db.Timestamptz
+
+  // 관계
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@unique([userId, commandName])
+  @@index([userId, commandName])
+  @@index([expiresAt])
+  @@map("cooldowns")
+}
