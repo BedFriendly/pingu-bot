@@ -7,6 +7,12 @@ import { CoinTransferResDto } from './dto/response/CoinTransferResDto';
 import { DailyRewardResDto } from './dto/response/DailyRewardResDto';
 import { UserBalanceResDto } from './dto/response/UserBalanceResDto';
 import { logger } from '../../utils/logger';
+import {
+  DailyCooldownError,
+  InsufficientBalanceError,
+  InvalidAmountError,
+  SelfTransferError,
+} from '../../errors/economy';
 
 /**
  * Economy Service
@@ -44,17 +50,24 @@ export class EconomyService {
 
     // 비즈니스 로직: 자기 자신에게 전송 방지
     if (fromUserId === toUserId) {
-      throw new Error('자기 자신에게 코인을 전송할 수 없습니다.');
+      throw new SelfTransferError('자기 자신에게 코인을 전송할 수 없습니다.');
     }
 
     // 비즈니스 로직: 최소 전송 금액 검증
     if (amount < this.MIN_TRANSFER_AMOUNT) {
-      throw new Error(`최소 전송 금액은 ${this.MIN_TRANSFER_AMOUNT} PC입니다.`);
+      throw new InvalidAmountError(
+        `최소 전송 금액은 ${this.MIN_TRANSFER_AMOUNT} PC입니다.`,
+        'below-minimum',
+        this.MIN_TRANSFER_AMOUNT
+      );
     }
 
     // 비즈니스 로직: 음수 금액 방지
     if (amount <= 0) {
-      throw new Error('전송할 코인 양은 양수여야 합니다.');
+      throw new InvalidAmountError(
+        '전송할 코인 양은 양수여야 합니다.',
+        'negative'
+      );
     }
 
     // 사용자 생성 또는 조회
@@ -66,8 +79,10 @@ export class EconomyService {
 
     // 비즈니스 로직: 잔액 검증
     if (sender.coins < amount) {
-      throw new Error(
-        `잔액이 부족합니다. (보유: ${sender.coins} PC, 필요: ${amount} PC)`
+      throw new InsufficientBalanceError(
+        `잔액이 부족합니다. (보유: ${sender.coins} PC, 필요: ${amount} PC)`,
+        amount,
+        sender.coins
       );
     }
 
@@ -123,8 +138,10 @@ export class EconomyService {
           (remainingMs % (60 * 60 * 1000)) / (60 * 1000)
         );
 
-        throw new Error(
-          `일일 보상은 ${remainingHours}시간 ${remainingMinutes}분 후에 다시 받을 수 있습니다.`
+        throw new DailyCooldownError(
+          `일일 보상은 ${remainingHours}시간 ${remainingMinutes}분 후에 다시 받을 수 있습니다.`,
+          remainingHours,
+          remainingMinutes
         );
       }
     }
