@@ -66,14 +66,8 @@ export class PinguBot extends Client {
   }
 
   private async loadCommands(): Promise<void> {
-    const commandsPath = path.join(__dirname, 'commands');
-    const commandCategories = [
-      'games',
-      'economy',
-      'leveling',
-      'fun',
-      'utility',
-    ];
+    const commandsPath = path.join(__dirname, 'command');
+    const commandCategories = ['game', 'economy', 'leveling', 'fun', 'utility'];
 
     for (const category of commandCategories) {
       const categoryPath = path.join(commandsPath, category);
@@ -88,7 +82,7 @@ export class PinguBot extends Client {
 
       for (const file of commandFiles) {
         const filePath = path.join(categoryPath, file);
-        const command: Command = require(filePath).default;
+        const command: Command = new (require(filePath).default)();
 
         if ('data' in command && 'execute' in command) {
           this.commands.set(command.data.name, command);

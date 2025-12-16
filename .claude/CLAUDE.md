@@ -97,9 +97,9 @@ src/
 ├── config/                     # Configuration management
 │   ├── config.ts               # Environment variables
 │   └── constants.ts            # Application constants
-├── commands/                   # Command handlers (Class-based)
+├── command/                   # Command handlers (Class-based)
 │   ├── economy/                # Economy commands (balance, pay, daily)
-│   ├── games/                  # Game commands (dice, rps, coinflip, guess)
+│   ├── game/                   # Game commands (dice, rps, coinflip, guess)
 │   ├── leveling/               # Leveling commands (level)
 │   ├── fun/                    # Fun commands (penguin, 8ball, choose, roll)
 │   └── utility/                # Utility commands (help, ping)
