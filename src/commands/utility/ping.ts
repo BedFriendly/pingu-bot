@@ -5,13 +5,19 @@ import {
 } from 'discord.js';
 import { Command } from '../../types/command';
 
-const command: Command = {
-  data: new SlashCommandBuilder()
+/**
+ * Ping Command (Class 기반)
+ * 봇의 레이턴시와 API 응답 시간을 확인하는 커맨드
+ */
+export default class PingCommand implements Command {
+  data = new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('Check the bot latency and API response time'),
-  category: 'utility',
-  cooldown: 3,
-  execute: async (interaction: ChatInputCommandInteraction) => {
+    .setDescription('Check the bot latency and API response time');
+
+  category = 'utility' as const;
+  cooldown = 3;
+
+  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     const sent = await interaction.reply({
       content: '🏓 Pinging...',
       flags: MessageFlags.Ephemeral,
@@ -29,7 +35,5 @@ const command: Command = {
         `⚡ WebSocket Latency: \`${apiLatency}ms\``,
       ].join('\n'),
     });
-  },
-};
-
-export default command;
+  }
+}

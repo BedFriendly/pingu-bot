@@ -8,10 +8,9 @@ import {
 import fs from 'fs';
 import path from 'path';
 import { Command } from './types/command';
-import { BotEvent } from './types/event';
 import { config } from './config/config';
 import { logger } from './utils/logger';
-import { db } from './database';
+import { prismaService } from './database';
 
 export class PinguBot extends Client {
   public commands: Collection<string, Command>;
@@ -53,7 +52,7 @@ export class PinguBot extends Client {
   private async initializeDatabase(): Promise<void> {
     try {
       logger.info('Initializing database connection...');
-      const connected = await db.testConnection();
+      const connected = await prismaService.testConnection();
 
       if (!connected) {
         throw new Error('Failed to connect to database');
@@ -119,7 +118,7 @@ export class PinguBot extends Client {
 
     for (const file of eventFiles) {
       const filePath = path.join(eventsPath, file);
-      const event: BotEvent = require(filePath).default;
+      const event = require(filePath).default;
 
       if (event.once) {
         this.once(event.name, (...args) => event.execute(...args));

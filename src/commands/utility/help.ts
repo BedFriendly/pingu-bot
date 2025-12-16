@@ -6,20 +6,32 @@ import {
 import { Command } from '../../types/command';
 import { PinguBot } from '../../bot';
 import { CONSTANTS } from '../../config/constants';
-import { UserModel } from '../../database/models';
+import { UserRepository } from '../../repository/impl/UserRepository';
 
-const command: Command = {
-  data: new SlashCommandBuilder()
+/**
+ * Help Command (Class 기반)
+ * 모든 사용 가능한 커맨드와 설명을 표시하는 커맨드
+ */
+export default class HelpCommand implements Command {
+  data = new SlashCommandBuilder()
     .setName('help')
-    .setDescription('Display all available commands and their descriptions'),
-  category: 'utility',
-  execute: async (interaction: ChatInputCommandInteraction) => {
+    .setDescription('Display all available commands and their descriptions');
+
+  category = 'utility' as const;
+
+  private userRepository: UserRepository;
+
+  constructor() {
+    this.userRepository = new UserRepository();
+  }
+
+  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     const client = interaction.client as PinguBot;
 
     // 사용자 정보 가져오기
     let userInfo = '';
     try {
-      const user = await UserModel.findById(interaction.user.id);
+      const user = await this.userRepository.findById(interaction.user.id);
       if (user) {
         userInfo = `\n💰 Coins: **${user.coins} PC** | ⬆️ Level: **${user.level}** (${user.experience} XP)`;
       }
@@ -56,7 +68,7 @@ const command: Command = {
         .join('\n');
 
       embed.addFields({
-        name: `${getCategoryEmoji(category)} ${categoryName}`,
+        name: `${this.getCategoryEmoji(category)} ${categoryName}`,
         value: commandList || 'No commands',
         inline: false,
       });
@@ -68,18 +80,16 @@ const command: Command = {
     });
 
     await interaction.reply({ embeds: [embed] });
-  },
-};
+  }
 
-function getCategoryEmoji(category: string): string {
-  const emojis: Record<string, string> = {
-    games: '🎮',
-    economy: '🪙',
-    leveling: '⬆️',
-    fun: '🎉',
-    utility: '🔧',
-  };
-  return emojis[category] || '📁';
+  private getCategoryEmoji(category: string): string {
+    const emojis: Record<string, string> = {
+      games: '🎮',
+      economy: '🪙',
+      leveling: '⬆️',
+      fun: '🎉',
+      utility: '🔧',
+    };
+    return emojis[category] || '📁';
+  }
 }
-
-export default command;

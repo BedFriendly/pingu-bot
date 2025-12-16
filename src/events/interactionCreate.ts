@@ -3,7 +3,8 @@ import { Collection, Interaction } from 'discord.js';
 import { BotEvent } from '../types/event';
 import { PinguBot } from '../bot';
 import { logger } from '../utils/logger';
-import { UserModel, GuildModel } from '../database/models';
+import { UserRepository } from '../repository/impl/UserRepository';
+import { GuildRepository } from '../repository/impl/GuildRepository';
 
 const event: BotEvent<'interactionCreate'> = {
   name: 'interactionCreate',
@@ -20,15 +21,18 @@ const event: BotEvent<'interactionCreate'> = {
 
     // 사용자 및 길드 자동 생성/조회
     try {
+      const userRepository = new UserRepository();
+      const guildRepository = new GuildRepository();
+
       // 사용자가 데이터베이스에 없으면 생성
-      await UserModel.findOrCreate(
+      await userRepository.findOrCreate(
         interaction.user.id,
         interaction.user.username
       );
 
       // 길드에서 실행된 경우 길드도 생성
       if (interaction.guild) {
-        await GuildModel.findOrCreate(
+        await guildRepository.findOrCreate(
           interaction.guild.id,
           interaction.guild.name
         );

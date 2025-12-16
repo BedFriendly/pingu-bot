@@ -1,7 +1,7 @@
 import { Client } from 'discord.js';
 import { BotEvent } from '../types/event';
 import { logger } from '../utils/logger';
-import { db } from '../database';
+import { prismaService } from '../database';
 
 const event: BotEvent<'clientReady'> = {
   name: 'clientReady',
@@ -15,7 +15,7 @@ const event: BotEvent<'clientReady'> = {
 
     // 데이터베이스 연결 상태 확인
     try {
-      const dbConnected = await db.testConnection();
+      const dbConnected = await prismaService.testConnection();
       if (dbConnected) {
         logger.info('💾 Database connection verified');
       }
