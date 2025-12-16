@@ -2,6 +2,7 @@ import {
   SlashCommandBuilder,
   ChatInputCommandInteraction,
   EmbedBuilder,
+  MessageFlags,
 } from 'discord.js';
 import { Command } from '../../types/command';
 import { PinguBot } from '../../bot';
@@ -79,7 +80,7 @@ export default class HelpCommand implements Command {
       iconURL: interaction.user.displayAvatarURL(),
     });
 
-    await interaction.reply({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
   }
 
   private getCategoryEmoji(category: string): string {

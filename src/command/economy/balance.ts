@@ -2,6 +2,7 @@ import {
   SlashCommandBuilder,
   ChatInputCommandInteraction,
   User as DiscordUser,
+  MessageFlags,
 } from 'discord.js';
 import { Command } from '../../types/command';
 import { EconomyService } from '../../service/economy/economy.service';
@@ -62,7 +63,7 @@ export default class BalanceCommand implements Command {
       logger.error('잔액 조회 실패:', error);
       await interaction.reply({
         content: '❌ 정보를 불러오는 중 오류가 발생했습니다.',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
   }
