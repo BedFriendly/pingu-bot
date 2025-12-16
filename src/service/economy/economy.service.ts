@@ -13,7 +13,7 @@ import { logger } from '../../utils/logger';
  * 경제 시스템 비즈니스 로직 처리
  */
 export class EconomyService {
-  private readonly DAILY_REWARD_AMOUNT = 100; // 일일 보상 금액
+  private readonly DAILY_REWARD_AMOUNT = 1000; // 일일 보상 금액
   private readonly DAILY_COOLDOWN_HOURS = 24; // 일일 보상 쿨다운 (시간)
   private readonly MIN_TRANSFER_AMOUNT = 10; // 최소 전송 금액
 
@@ -130,14 +130,14 @@ export class EconomyService {
     }
 
     // 코인 지급 및 lastDaily 업데이트
+    const updatedLastDaily = new Date();
     const updatedUser = await this.userRepository.updateUser(userId, {
       coins: user.coins + this.DAILY_REWARD_AMOUNT,
-      lastDaily: new Date(),
+      lastDaily: updatedLastDaily,
     });
 
     const nextClaimTime = new Date(
-      updatedUser.lastDaily!.getTime() +
-        this.DAILY_COOLDOWN_HOURS * 60 * 60 * 1000
+      updatedLastDaily.getTime() + this.DAILY_COOLDOWN_HOURS * 60 * 60 * 1000
     );
 
     logger.info('일일 보상 지급:', {
