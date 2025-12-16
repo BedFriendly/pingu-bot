@@ -7,6 +7,8 @@ import { Command } from '../../types/command';
 import { EconomyService } from '../../service/economy/economy.service';
 import { DailyRewardReqDto } from '../../service/economy/dto/request/DailyRewardReqDto';
 import { DailyRewardEmbed } from '../../embed/daily/DailyRewardEmbed';
+import { DailyCooldownError } from '../../errors/economy';
+import { logger } from '../../utils/logger';
 
 export default class DailyCommand implements Command {
   data = new SlashCommandBuilder()
@@ -41,12 +43,21 @@ export default class DailyCommand implements Command {
 
       await interaction.reply({ embeds: [embed] });
     } catch (error) {
-      console.error('Error claiming daily reward:', error);
-      await interaction.reply({
-        content:
-          '일일 보상을 받는 중에 오류가 발생했습니다. 나중에 다시 시도해주세요.',
-        flags: MessageFlags.Ephemeral,
-      });
+      // 쿨다운 오류는 사용자에게 남은 시간 표시
+      if (error instanceof DailyCooldownError) {
+        await interaction.reply({
+          content: `⏰ ${error.message}`,
+          flags: MessageFlags.Ephemeral,
+        });
+      } else {
+        // 예상치 못한 시스템 오류
+        logger.error('Unexpected error claiming daily reward:', error);
+        await interaction.reply({
+          content:
+            '일일 보상을 받는 중에 오류가 발생했습니다. 나중에 다시 시도해주세요.',
+          flags: MessageFlags.Ephemeral,
+        });
+      }
     }
   }
 }
