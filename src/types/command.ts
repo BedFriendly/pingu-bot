@@ -1,19 +1,19 @@
 import {
-  SlashCommandBuilder,
   ChatInputCommandInteraction,
   PermissionResolvable,
-  SlashCommandOptionsOnlyBuilder,
+  SharedSlashCommand,
 } from 'discord.js';
 
 export type CommandCategory =
-  | 'games'
+  | 'admin'
+  | 'game'
   | 'economy'
   | 'leveling'
   | 'fun'
   | 'utility';
 
 export interface Command {
-  data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
+  data: SharedSlashCommand;
   category: CommandCategory;
   cooldown?: number; // in seconds
   permissions?: PermissionResolvable[];
