@@ -11,10 +11,12 @@ import { Command } from './types/command';
 import { config } from './config/config';
 import { logger } from './utils/logger';
 import { prismaService } from './database';
+import { QuizScheduler } from './scheduler/QuizScheduler';
 
 export class PinguBot extends Client {
   public commands: Collection<string, Command>;
   public cooldowns: Collection<string, Collection<string, number>>;
+  public quizScheduler: QuizScheduler;
 
   constructor() {
     super({
@@ -28,6 +30,7 @@ export class PinguBot extends Client {
 
     this.commands = new Collection();
     this.cooldowns = new Collection();
+    this.quizScheduler = new QuizScheduler(this);
   }
 
   public async start(): Promise<void> {
@@ -41,6 +44,9 @@ export class PinguBot extends Client {
       await this.loadEvents();
       await this.registerSlashCommands();
       await this.login(config.discord.token);
+
+      // 로그인 후 QuizScheduler 초기화
+      await this.quizScheduler.initialize();
 
       logger.info('Pingu Bot started successfully!');
     } catch (error) {
@@ -67,7 +73,14 @@ export class PinguBot extends Client {
 
   private async loadCommands(): Promise<void> {
     const commandsPath = path.join(__dirname, 'command');
-    const commandCategories = ['game', 'economy', 'leveling', 'fun', 'utility'];
+    const commandCategories = [
+      'game',
+      'economy',
+      'leveling',
+      'fun',
+      'utility',
+      'admin',
+    ];
 
     for (const category of commandCategories) {
       const categoryPath = path.join(commandsPath, category);
@@ -149,5 +162,20 @@ export class PinguBot extends Client {
       logger.error('Error registering slash commands:', error);
       throw error;
     }
+  }
+
+  /**
+   * Graceful shutdown
+   */
+  public async shutdown(): Promise<void> {
+    logger.info('Shutting down Pingu Bot...');
+
+    // QuizScheduler 종료
+    this.quizScheduler.shutdown();
+
+    // Bot 종료
+    this.destroy();
+
+    logger.info('Pingu Bot shutdown complete');
   }
 }
