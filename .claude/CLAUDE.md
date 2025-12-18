@@ -97,59 +97,110 @@ src/
 ├── config/                     # Configuration management
 │   ├── config.ts               # Environment variables
 │   └── constants.ts            # Application constants
-├── command/                   # Command handlers (Class-based)
-│   ├── economy/                # Economy commands (balance, pay, daily)
-│   ├── game/                   # Game commands (dice, rps, coinflip, guess)
-│   ├── leveling/               # Leveling commands (level)
-│   ├── fun/                    # Fun commands (penguin, 8ball, choose, roll)
-│   └── utility/                # Utility commands (help, ping)
-├── events/                     # Event handlers
-│   ├── ready.ts                # Bot ready event
-│   ├── interactionCreate.ts   # Slash command handler
-│   ├── messageCreate.ts        # Message-based XP handler
-│   └── guildMemberAdd.ts       # Welcome message handler
-├── embed/                      # Discord Embed builders (View layer)
-│   ├── balance/                # Balance display embeds
-│   ├── pay/                    # Payment result embeds
-│   ├── daily/                  # Daily reward embeds
-│   └── level/                  # Level info embeds
-├── service/                    # Business logic layer (Domain-driven)
-│   ├── user/
-│   │   └── dto/                # User domain DTOs
-│   │       └── UserDto.ts      # Entity DTO
-│   ├── economy/
-│   │   ├── economy.service.ts  # Economy business logic
-│   │   └── dto/
+│
+├── command/                    # Command handlers (Class-based)
+│   ├── economy/                # Economy commands
+│   │   ├── balance.ts          # Balance command
+│   │   ├── pay.ts              # Pay command
+│   │   ├── daily.ts            # Daily reward command
+│   │   └── leaderboard.ts      # Leaderboard command
+│   ├── game/                   # Game commands
+│   │   ├── dice.ts             # Dice game
+│   │   ├── rps.ts              # Rock-paper-scissors
+│   │   ├── coinflip.ts         # Coin flip
+│   │   └── guess.ts            # Number guessing
+│   ├── leveling/               # Leveling commands
+│   │   └── level.ts            # Level info
+│   ├── fun/                    # Fun commands
+│   │   ├── penguin.ts          # Random penguin image
+│   │   ├── 8ball.ts            # Magic 8-ball
+│   │   ├── choose.ts           # Choose between options
+│   │   └── roll.ts             # Dice roll
+│   └── utility/                # Utility commands
+│       ├── help.ts             # Help command
+│       ├── info.ts             # Bot info
+│       └── ping.ts             # Ping command
+│
+├── embed/                      # Discord Embed builders (Command별)
+│   ├── balance/                # balance 명령어용 Embed
+│   │   └── UserBalanceEmbed.ts
+│   ├── pay/                    # pay 명령어용 Embed
+│   │   └── CoinTransferEmbed.ts
+│   ├── daily/                  # daily 명령어용 Embed
+│   │   └── DailyRewardEmbed.ts
+│   ├── level/                  # level 명령어용 Embed
+│   │   └── UserLevelEmbed.ts
+│   └── index.ts                # Embed exports
+│
+├── service/                    # Business logic layer (도메인별)
+│   ├── user/                   # User 도메인
+│   │   ├── user.service.ts     # User Service
+│   │   └── dto/                # User DTO
+│   │       ├── UserDto.ts      # Entity DTO (직접 배치)
 │   │       ├── request/        # Request DTOs
 │   │       └── response/       # Response DTOs
-│   └── leveling/
-│       ├── leveling.service.ts # Leveling business logic
-│       └── dto/
-│           ├── request/
-│           └── response/
+│   │
+│   ├── economy/                # Economy 도메인
+│   │   ├── economy.service.ts  # Economy Service
+│   │   └── dto/
+│   │       ├── request/
+│   │       │   ├── CoinTransferReqDto.ts
+│   │       │   └── DailyRewardReqDto.ts
+│   │       └── response/
+│   │           ├── CoinTransferResDto.ts
+│   │           ├── UserBalanceResDto.ts
+│   │           ├── DailyRewardResDto.ts
+│   │           └── UserLeaderboardResDto.ts
+│   │
+│   ├── leveling/               # Leveling 도메인
+│   │   ├── leveling.service.ts # Leveling Service
+│   │   └── dto/
+│   │       └── response/
+│   │           ├── UserLevelUpResDto.ts
+│   │           └── UserLevelInfoResDto.ts
+│   └── index.ts                # Service exports
+│
 ├── repository/                 # Repository layer
 │   ├── IUserRepository.ts      # User repository interface
 │   ├── IGuildRepository.ts     # Guild repository interface
-│   └── impl/                   # Repository implementations
-│       ├── UserRepository.ts
-│       └── GuildRepository.ts
+│   ├── impl/                   # Repository implementations
+│   │   ├── UserRepository.ts
+│   │   └── GuildRepository.ts
+│   └── index.ts                # Repository exports
+│
 ├── database/                   # Database layer
 │   ├── prisma.ts               # Prisma client singleton
 │   ├── dao/                    # Data Access Objects
 │   │   ├── IUserDAO.ts         # User DAO interface
 │   │   ├── IGuildDAO.ts        # Guild DAO interface
 │   │   ├── IGameStatDAO.ts     # GameStat DAO interface
-│   │   └── impl/               # DAO implementations
-│   │       ├── UserDAO.ts
-│   │       ├── GuildDAO.ts
-│   │       └── GameStatDAO.ts
-│   └── migrations/             # Migration scripts
+│   │   ├── impl/               # DAO implementations
+│   │   │   ├── UserDAO.ts
+│   │   │   ├── GuildDAO.ts
+│   │   │   └── GameStatDAO.ts
+│   │   └── index.ts            # DAO exports
+│   └── index.ts                # Database exports
+│
+├── events/                     # Event handlers
+│   ├── index.ts                # Event loader
+│   ├── ready.ts                # Bot ready event
+│   ├── interactionCreate.ts   # Slash command handler
+│   ├── messageCreate.ts        # Message-based XP handler
+│   └── guildMemberAdd.ts       # Welcome message handler
+│
 ├── utils/                      # Utility functions
-│   └── logger.ts               # Winston logger
+│   ├── logger.ts               # Winston logger
+│   ├── cooldown.ts             # Cooldown management
+│   ├── validator.ts            # Input validation
+│   └── formatter.ts            # Data formatting
+│
 ├── types/                      # TypeScript interfaces
 │   ├── command.ts              # Command interface
 │   └── event.ts                # Event interface
+│
 └── middleware/                 # Middleware (future)
+    ├── cooldown.ts             # Cooldown middleware
+    └── permission.ts           # Permission check
 ```
 
 ### Key Architectural Patterns
@@ -504,6 +555,126 @@ Multi-layer error handling:
 - Development: console logging
 - Log context: command, user, guild, timestamp
 
+## Folder Structure Design Principles
+
+### 1. DAO - database 폴더 내부
+
+```
+database/
+├── dao/
+│   ├── IUserDAO.ts          # 인터페이스
+│   └── impl/
+│       └── UserDAO.ts       # 구현체
+```
+
+**이유**: DAO는 데이터베이스 접근 계층이므로 database 폴더 내에 위치
+
+### 2. Service - 도메인별 관리
+
+```
+service/
+├── user/
+│   ├── user.service.ts      # User 관련 비즈니스 로직
+│   └── dto/
+│       ├── UserDto.ts       # Entity DTO (직접 배치)
+│       ├── request/         # Request DTOs
+│       └── response/        # Response DTOs
+```
+
+**이유**:
+- 도메인별로 응집도 높은 구조
+- DTO가 Service와 같은 위치에 있어 관리 용이
+- 도메인 경계가 명확
+
+### 3. Repository - impl 폴더로 구현체 분리
+
+```
+repository/
+├── IUserRepository.ts       # 인터페이스
+└── impl/
+    └── UserRepository.ts    # 구현체
+```
+
+**이유**: 인터페이스와 구현체를 분리하여 의존성 역전 원칙 준수
+
+### 4. Embed - Command별 관리
+
+```
+embed/
+├── balance/
+│   └── UserBalanceEmbed.ts    # balance 명령어용 Embed
+├── pay/
+│   └── CoinTransferEmbed.ts   # pay 명령어용 Embed
+```
+
+**이유**:
+- Embed는 명령어의 응답 형식이므로 Command와 가까운 위치
+- Command별로 분리하여 관리 용이
+- Embed 생성 로직과 Command 로직 분리
+
+**규칙**:
+- **네이밍**: `{Data}{Action}Embed` (Upper Camel Case)
+  - 예: `UserBalanceEmbed`, `CoinTransferEmbed`, `DailyRewardEmbed`
+- **호출**: Command에서만 호출 (Service에서 호출 금지)
+- **역할**: Props를 받아서 EmbedBuilder 객체만 생성 (전송은 Command가 담당)
+
+## Layer Import Examples
+
+### Command → Service + Embed
+
+```typescript
+// src/command/economy/pay.ts
+import { EconomyService } from '../../service/economy/economy.service';
+import { CoinTransferReqDto } from '../../service/economy/dto/request/CoinTransferReqDto';
+import { CoinTransferEmbed } from '../../embed/pay/CoinTransferEmbed';
+```
+
+### Service → Repository
+
+```typescript
+// src/service/economy/economy.service.ts
+import { IUserRepository } from '../../repository/IUserRepository';
+import { UserRepository } from '../../repository/impl/UserRepository';
+```
+
+### Repository → DAO
+
+```typescript
+// src/repository/impl/UserRepository.ts
+import { IUserDAO } from '../../database/dao/IUserDAO';
+import { UserDAO } from '../../database/dao/impl/UserDAO';
+```
+
+### DAO → Prisma
+
+```typescript
+// src/database/dao/impl/UserDAO.ts
+import { prisma } from '../../prisma';
+```
+
+## DTO Naming and Placement
+
+### Entity DTO
+
+- **위치**: `service/{domain}/dto/EntityDto.ts` (직접 배치)
+- **네이밍**: `{EntityName}Dto` (예: `UserDto`)
+- **용도**: Response DTO에서만 사용
+- **특징**: Prisma 타입을 DTO로 변환
+
+### Request DTO
+
+- **위치**: `service/{domain}/dto/request/`
+- **네이밍**: `{Domain}{Action}ReqDto` (예: `CoinTransferReqDto`)
+- **용도**: Service 메서드 입력
+- **특징**: 절대 재사용 불가 (각 작업마다 별도 DTO)
+
+### Response DTO
+
+- **위치**: `service/{domain}/dto/response/`
+- **네이밍**: `{Domain}{Action}ResDto` (예: `CoinTransferResDto`)
+- **용도**: Service 메서드 출력
+- **특징**: Entity DTO 활용 가능 (`Pick`, `Omit` 사용)
+
 ### Architectural Rules to Follow
 
 **When creating new features:**
@@ -516,6 +687,9 @@ Multi-layer error handling:
 6. **Repositories can combine DAOs** - But no business logic in Repository
 7. **All DTO properties readonly** - Enforce immutability
 8. **Use TypeScript utility types** - Prefer `Pick`, `Omit` over new DTOs
+9. **DAO in database folder** - DAOs belong in database/dao/impl/
+10. **Service organized by domain** - DTOs live with their services
+11. **Embed organized by command** - One folder per command
 
 **Example of correct flow:**
 
