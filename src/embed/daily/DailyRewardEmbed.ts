@@ -22,13 +22,8 @@ export class DailyRewardEmbed {
       .setDescription(`**${username}**님이 일일 보상을 받았습니다!`)
       .addFields(
         {
-          name: '받은 금액',
-          value: `${rewardAmount.toLocaleString()} PC`,
-          inline: true,
-        },
-        {
           name: '현재 잔액',
-          value: `${newBalance.toLocaleString()} PC`,
+          value: `${newBalance.toLocaleString()}(+${rewardAmount.toLocaleString()}) PC`,
           inline: true,
         },
         {
