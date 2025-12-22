@@ -8,9 +8,9 @@
  */
 export enum QuizType {
   NUMBER_MATH = 'number_math', // 숫자 계산 퀴즈
-  NUMBER_SEQUENCE = 'number_sequence', // 수열 퀴즈
-  WORD_SCRAMBLE = 'word_scramble', // 단어 섞기 퀴즈
-  WORD_TRIVIA = 'word_trivia', // 상식 퀴즈
+  // NUMBER_SEQUENCE = 'number_sequence', // TODO: 수열 퀴즈
+  // WORD_SCRAMBLE = 'word_scramble', // TODO:단어 섞기 퀴즈
+  // WORD_TRIVIA = 'word_trivia', // TODO: 상식 퀴즈
 }
 
 /**

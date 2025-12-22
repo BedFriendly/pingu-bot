@@ -15,6 +15,7 @@ import {
 } from '../../errors/game/quiz';
 import { logger } from '../../utils/logger';
 import { config } from '../../config/config';
+import { QuizType } from '../../types/quiz';
 
 /**
  * Quiz Service
@@ -111,7 +112,7 @@ export class QuizService {
 
     // 2. 정답 검증
     const generator = QuizGeneratorFactory.getGenerator(
-      session.quizType as any
+      session.quizType as QuizType
     );
     const isCorrect = generator.validateAnswer(answer, session.answer);
 
