@@ -6,14 +6,12 @@ import { EmbedBuilder } from 'discord.js';
 export class QuizEmbed {
   static create(props: {
     question: string;
-    quizType: string;
     difficulty: number;
     hint?: string;
     timeLimit: number;
     rewardAmount: number;
   }): EmbedBuilder {
-    const { question, quizType, difficulty, hint, timeLimit, rewardAmount } =
-      props;
+    const { question, difficulty, hint, timeLimit, rewardAmount } = props;
 
     const difficultyStars = '⭐'.repeat(Math.min(difficulty, 5));
 
@@ -24,7 +22,6 @@ export class QuizEmbed {
       .addFields(
         { name: '⏱️ 제한 시간', value: `${timeLimit}초`, inline: true },
         { name: '💰 보상', value: `${rewardAmount} PC`, inline: true },
-        { name: '📝 퀴즈 타입', value: quizType, inline: true },
         { name: '🎯 난이도', value: difficultyStars, inline: true }
       )
       .setFooter({ text: '채팅에 답을 입력하세요!' })

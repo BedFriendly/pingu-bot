@@ -41,7 +41,7 @@ export class QuizScheduler {
     logger.info('QuizScheduler 초기화 중...');
 
     // 만료된 퀴즈 정리 작업 (5분마다)
-    this.scheduleCleanup();
+    // this.scheduleCleanup();
 
     // 메인 퀴즈 생성 작업 스케줄링
     this.scheduleMainQuizJob();
@@ -121,7 +121,6 @@ export class QuizScheduler {
 
       const embed = QuizEmbed.create({
         question: quizRes.session.question,
-        quizType: quizRes.session.quizType,
         difficulty: quizRes.session.difficulty,
         hint: quizRes.session.hint,
         timeLimit: quizRes.session.timeLimit,
@@ -172,7 +171,7 @@ export class QuizScheduler {
           quizSessionId,
           userId: message.author.id,
           username: message.author.username,
-          answer: message.content,
+          answer: message.content.trim(),
         });
 
         const result = await this.quizService.submitAnswer(reqDto);
@@ -203,9 +202,9 @@ export class QuizScheduler {
     collector.on('end', async (collected, reason) => {
       if (reason === 'time') {
         try {
-          await this.quizService.expireSession(quizSessionId);
           const embed = QuizExpiredEmbed.create({ answer: correctAnswer });
           await channel.send({ embeds: [embed] });
+          await this.quizService.expireSession(quizSessionId);
         } catch (error) {
           logger.error('퀴즈 만료 처리 실패:', error);
         }

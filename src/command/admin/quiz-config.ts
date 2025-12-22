@@ -56,6 +56,8 @@ export default class QuizConfigCommand implements Command {
     const subcommand = interaction.options.getSubcommand();
     const guildId = interaction.guildId!;
 
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
     try {
       switch (subcommand) {
         case 'set':
@@ -70,9 +72,8 @@ export default class QuizConfigCommand implements Command {
       }
     } catch (error) {
       logger.error('퀴즈 설정 실패:', error);
-      await interaction.reply({
+      await interaction.editReply({
         content: `❌ 설정 중 오류가 발생했습니다: ${(error as Error).message}`,
-        flags: MessageFlags.Ephemeral,
       });
     }
   }
@@ -93,9 +94,8 @@ export default class QuizConfigCommand implements Command {
 
     await this.quizService.setQuizChannel(reqDto);
 
-    await interaction.reply({
-      content: `✅ 퀴즈 채널이 <#${channel.id}>로 설정되었습니다.\n퀴즈는 \`${config.quiz.generationCron}\` 주기로 생성됩니다.`,
-      flags: MessageFlags.Ephemeral,
+    await interaction.editReply({
+      content: `✅ 퀴즈 채널이 <#${channel.id}>로 설정되었습니다.`,
     });
   }
 
@@ -105,9 +105,8 @@ export default class QuizConfigCommand implements Command {
   ): Promise<void> {
     await this.quizService.disableQuiz(guildId);
 
-    await interaction.reply({
+    await interaction.editReply({
       content: '✅ 퀴즈 시스템이 비활성화되었습니다.',
-      flags: MessageFlags.Ephemeral,
     });
   }
 
@@ -156,6 +155,6 @@ export default class QuizConfigCommand implements Command {
       );
     }
 
-    await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+    await interaction.editReply({ embeds: [embed] });
   }
 }
