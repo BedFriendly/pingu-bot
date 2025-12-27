@@ -1,7 +1,7 @@
 import { ClientEvents } from 'discord.js';
 
-export interface BotEvent {
-  name: keyof ClientEvents;
+export interface BotEvent<T extends keyof ClientEvents> {
+  name: T;
   once?: boolean;
-  execute: (...args: any[]) => Promise<void>;
+  execute: (...args: ClientEvents[T]) => Promise<void>;
 }

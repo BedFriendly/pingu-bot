@@ -1,5 +1,6 @@
 import { PinguBot } from './bot';
 import { logger } from './utils/logger';
+import { prismaService } from './database';
 
 const bot = new PinguBot();
 
@@ -14,15 +15,17 @@ process.on('uncaughtException', (error: Error) => {
 });
 
 // Graceful shutdown
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   logger.info('Received SIGINT, shutting down gracefully...');
   bot.destroy();
+  await prismaService.disconnect();
   process.exit(0);
 });
 
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   logger.info('Received SIGTERM, shutting down gracefully...');
   bot.destroy();
+  await prismaService.disconnect();
   process.exit(0);
 });
 

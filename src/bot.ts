@@ -8,13 +8,15 @@ import {
 import fs from 'fs';
 import path from 'path';
 import { Command } from './types/command';
-import { BotEvent } from './types/event';
 import { config } from './config/config';
 import { logger } from './utils/logger';
+import { prismaService } from './database';
+import { QuizScheduler } from './scheduler/QuizScheduler';
 
 export class PinguBot extends Client {
   public commands: Collection<string, Command>;
   public cooldowns: Collection<string, Collection<string, number>>;
+  public quizScheduler: QuizScheduler;
 
   constructor() {
     super({
@@ -28,16 +30,23 @@ export class PinguBot extends Client {
 
     this.commands = new Collection();
     this.cooldowns = new Collection();
+    this.quizScheduler = new QuizScheduler(this);
   }
 
   public async start(): Promise<void> {
     try {
       logger.info('Starting Pingu Bot...');
 
+      // 데이터베이스 연결 확인
+      await this.initializeDatabase();
+
       await this.loadCommands();
       await this.loadEvents();
       await this.registerSlashCommands();
       await this.login(config.discord.token);
+
+      // 로그인 후 QuizScheduler 초기화
+      await this.quizScheduler.initialize();
 
       logger.info('Pingu Bot started successfully!');
     } catch (error) {
@@ -46,14 +55,31 @@ export class PinguBot extends Client {
     }
   }
 
+  private async initializeDatabase(): Promise<void> {
+    try {
+      logger.info('Initializing database connection...');
+      const connected = await prismaService.testConnection();
+
+      if (!connected) {
+        throw new Error('Failed to connect to database');
+      }
+
+      logger.info('Database connection established successfully');
+    } catch (error) {
+      logger.error('Database initialization failed:', error);
+      throw error;
+    }
+  }
+
   private async loadCommands(): Promise<void> {
-    const commandsPath = path.join(__dirname, 'commands');
+    const commandsPath = path.join(__dirname, 'command');
     const commandCategories = [
-      'games',
+      'game',
       'economy',
       'leveling',
       'fun',
       'utility',
+      'admin',
     ];
 
     for (const category of commandCategories) {
@@ -69,7 +95,7 @@ export class PinguBot extends Client {
 
       for (const file of commandFiles) {
         const filePath = path.join(categoryPath, file);
-        const command: Command = require(filePath).default;
+        const command: Command = new (require(filePath).default)();
 
         if ('data' in command && 'execute' in command) {
           this.commands.set(command.data.name, command);
@@ -99,7 +125,7 @@ export class PinguBot extends Client {
 
     for (const file of eventFiles) {
       const filePath = path.join(eventsPath, file);
-      const event: BotEvent = require(filePath).default;
+      const event = require(filePath).default;
 
       if (event.once) {
         this.once(event.name, (...args) => event.execute(...args));
@@ -136,5 +162,20 @@ export class PinguBot extends Client {
       logger.error('Error registering slash commands:', error);
       throw error;
     }
+  }
+
+  /**
+   * Graceful shutdown
+   */
+  public async shutdown(): Promise<void> {
+    logger.info('Shutting down Pingu Bot...');
+
+    // QuizScheduler 종료
+    this.quizScheduler.shutdown();
+
+    // Bot 종료
+    this.destroy();
+
+    logger.info('Pingu Bot shutdown complete');
   }
 }
