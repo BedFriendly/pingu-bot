@@ -177,6 +177,7 @@ export class QuizScheduler {
         const result = await this.quizService.submitAnswer(reqDto);
 
         if (result.isCorrect) {
+          collector.stop('correct_answer');
           await message.react('✅');
 
           const embed = QuizCorrectEmbed.create({
@@ -186,7 +187,6 @@ export class QuizScheduler {
           });
 
           await channel.send({ embeds: [embed] });
-          collector.stop('correct_answer');
         } else {
           await message.react('❌');
         }
