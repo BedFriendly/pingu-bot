@@ -47,6 +47,9 @@ COPY package.json yarn.lock ./
 # 프로덕션 의존성만 설치
 RUN yarn install --production --frozen-lockfile && yarn cache clean
 
+# prisma 스키마 복사
+COPY --from=builder /app/prisma ./prisma
+
 # prisma client 생성
 RUN yarn prisma:generate
 
