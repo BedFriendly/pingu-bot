@@ -36,8 +36,8 @@ FROM node:20.19.6-slim
 WORKDIR /app
 
 # 프로덕션 사용자 생성 (보안)
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S pingubot -u 1001
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 pingubot
 
 # 패키지 파일 복사
 COPY package.json yarn.lock ./
