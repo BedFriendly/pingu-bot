@@ -20,6 +20,9 @@ RUN yarn install --frozen-lockfile
 # 소스 코드 복사
 COPY . .
 
+# prisma client 생성
+RUN yarn prisma:generate
+
 # TypeScript 빌드
 RUN yarn build
 

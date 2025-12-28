@@ -35,6 +35,9 @@ jobs:
       # - name: 테스트 실행 (테스트 스크립트가 있다면)
       #   run: yarn test
 
+      - name: prisma client 생성
+        run: yarn prisma:generate
+
       - name: TypeScript 빌드
         run: yarn build
 
