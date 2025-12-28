@@ -3,13 +3,17 @@
 # ==============================
 
 # Build stage
-FROM node:20.19.6-alpine3.23 AS builder
+FROM node:20.19.6-slim AS builder
 
 # 작업 디렉토리 설정
 WORKDIR /app
 
 # 패키지 파일 복사
 COPY package.json yarn.lock ./
+
+# openssl 설치
+RUN apt-get update
+RUN apt-get install -y openssl
 
 # 의존성 설치 (devDependencies 포함 - TypeScript 빌드용)
 RUN yarn install --frozen-lockfile
@@ -27,7 +31,7 @@ RUN rm -rf dist
 RUN yarn build
 
 # Production stage
-FROM node:20.19.6-alpine3.23
+FROM node:20.19.6-slim
 
 WORKDIR /app
 
@@ -37,6 +41,10 @@ RUN addgroup -g 1001 -S nodejs && \
 
 # 패키지 파일 복사
 COPY package.json yarn.lock ./
+
+# openssl 설치
+RUN apt-get update
+RUN apt-get install -y openssl
 
 # 프로덕션 의존성만 설치
 RUN yarn install --production --frozen-lockfile && yarn cache clean
