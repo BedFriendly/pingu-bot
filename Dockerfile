@@ -3,13 +3,10 @@
 # ==============================
 
 # Build stage
-FROM node:20-alpine AS builder
+FROM node:20.19.6-alpine3.23 AS builder
 
 # 작업 디렉토리 설정
 WORKDIR /app
-
-# Yarn 설치 (alpine에는 기본 포함되지 않음)
-RUN corepack enable && corepack prepare yarn@1.22.19 --activate
 
 # 패키지 파일 복사
 COPY package.json yarn.lock ./
@@ -30,12 +27,9 @@ RUN rm -rf dist
 RUN yarn build
 
 # Production stage
-FROM node:20-alpine
+FROM node:20.19.6-alpine3.23
 
 WORKDIR /app
-
-# Yarn 설치
-RUN corepack enable && corepack prepare yarn@1.22.19 --activate
 
 # 프로덕션 사용자 생성 (보안)
 RUN addgroup -g 1001 -S nodejs && \
